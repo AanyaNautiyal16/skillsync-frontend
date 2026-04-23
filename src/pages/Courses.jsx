@@ -6,12 +6,10 @@ import "../styles/Courses.css";
 function Courses() {
   const navigate = useNavigate();
 
-  // State
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch courses on mount
   useEffect(() => {
     fetchCourses();
   }, []);
@@ -21,20 +19,26 @@ function Courses() {
       setLoading(true);
       setError("");
 
-      const data = await getCourses();
+      const response = await getCourses();
 
-      // ✅ IMPORTANT FIX
-      setCourses(data?.content || []);
+      // ✅ Handle both paginated & normal response
+      if (response?.content) {
+        setCourses(response.content);
+      } else if (Array.isArray(response)) {
+        setCourses(response);
+      } else {
+        setCourses([]);
+      }
 
     } catch (err) {
       console.error("Error fetching courses:", err);
-      setError("Failed to load courses");
+      setError(err.response?.data?.message || "Failed to load courses");
     } finally {
       setLoading(false);
     }
   };
 
-  // Loading state
+  // 🔄 Loading state
   if (loading) {
     return (
       <div className="courses-container">
@@ -61,21 +65,26 @@ function Courses() {
       {/* Error */}
       {error && <div className="error-message">{error}</div>}
 
-      {/* No Courses */}
+      {/* Empty State */}
       {courses.length === 0 ? (
         <p className="no-courses">No courses available yet</p>
       ) : (
         <div className="courses-grid">
           {courses.map((course) => (
             <div key={course.id} className="course-card">
+              
               <h3>{course.title}</h3>
+
               <p>{course.description}</p>
-              <p className="price">₹ {course.price}</p>
+
+              <p className="price">
+                ${Number(course.price).toFixed(2)}
+              </p>
+
             </div>
           ))}
         </div>
       )}
-
     </div>
   );
 }
