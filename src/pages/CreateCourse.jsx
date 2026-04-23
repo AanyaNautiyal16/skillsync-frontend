@@ -1,16 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createCourse } from "../services/courseService";
+import { getTokenPayload } from "../Utility/auth";
+import "../styles/CreateCourse.css";
 
 function CreateCourse() {
   const navigate = useNavigate();
 
+  // Form state
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     price: "",
   });
 
+  // UI state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -25,7 +29,7 @@ function CreateCourse() {
     }));
   };
 
-  // Submit form
+  // Handle submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
@@ -42,7 +46,11 @@ function CreateCourse() {
       return;
     }
 
-    if (formData.price === "" || isNaN(formData.price) || Number(formData.price) < 0) {
+    if (
+      formData.price === "" ||
+      isNaN(formData.price) ||
+      Number(formData.price) < 0
+    ) {
       setError("Price must be 0 or greater");
       return;
     }
@@ -50,22 +58,54 @@ function CreateCourse() {
     setLoading(true);
 
     try {
+      // ✅ Get JWT payload
+      const payload = getTokenPayload();
+
+      if (!payload) {
+        setError("Session expired. Please login again.");
+        setLoading(false);
+        return;
+      }
+
+      // ⚠️ IMPORTANT: adjust based on your backend
+      // If backend expects userId → use payload.userId
+      // If backend expects email → use payload.sub
+
       const courseData = {
         title: formData.title,
         description: formData.description,
-        price: Number(formData.price), // ✅ important
+        price: Number(formData.price),
+
+        // 🔥 FIX FOR 400 ERROR
+        user: {
+          id: payload.userId || payload.sub, 
+        },
       };
 
       await createCourse(courseData);
 
       setSuccess("Course created successfully!");
 
+      // Reset form
+      setFormData({
+        title: "",
+        description: "",
+        price: "",
+      });
+
+      // Redirect after delay
       setTimeout(() => {
         navigate("/courses");
       }, 1200);
 
     } catch (err) {
-      setError(err.message || "Failed to create course");
+      console.error("Create course error:", err);
+
+      setError(
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to create course"
+      );
     } finally {
       setLoading(false);
     }
@@ -75,12 +115,17 @@ function CreateCourse() {
     <div className="create-course-container">
       <div className="create-course-card">
 
-        <button className="back-btn" onClick={() => navigate("/courses")}>
+        <button
+          className="back-btn"
+          onClick={() => navigate("/courses")}
+        >
           ← Back to Courses
         </button>
 
         <h1>Create New Course</h1>
-        <p className="subtitle">Fill in the details to create a new course</p>
+        <p className="subtitle">
+          Fill in the details to create a new course
+        </p>
 
         <form onSubmit={handleSubmit}>
 
@@ -93,6 +138,7 @@ function CreateCourse() {
               value={formData.title}
               onChange={handleChange}
               maxLength={100}
+              disabled={loading}
             />
           </div>
 
@@ -104,6 +150,7 @@ function CreateCourse() {
               value={formData.description}
               onChange={handleChange}
               rows="5"
+              disabled={loading}
             />
           </div>
 
@@ -117,15 +164,26 @@ function CreateCourse() {
               onChange={handleChange}
               min="0"
               step="0.01"
+              disabled={loading}
             />
           </div>
 
-          {/* Messages */}
-          {error && <div className="alert alert-error">{error}</div>}
-          {success && <div className="alert alert-success">{success}</div>}
+          {/* Error */}
+          {error && (
+            <div className="alert alert-error">{error}</div>
+          )}
+
+          {/* Success */}
+          {success && (
+            <div className="alert alert-success">{success}</div>
+          )}
 
           {/* Button */}
-          <button type="submit" disabled={loading}>
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={loading}
+          >
             {loading ? "Creating..." : "Create Course"}
           </button>
 
