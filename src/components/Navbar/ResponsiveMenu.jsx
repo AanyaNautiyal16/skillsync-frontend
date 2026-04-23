@@ -1,5 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import { motion , AnimatePresence  } from 'framer-motion'
+import { NavbarMenu } from '../../mockData/data';
 
 const ResponsiveMenu = ({isOpen}) => {
   return (
@@ -16,10 +18,11 @@ const ResponsiveMenu = ({isOpen}) => {
                 >
                 <div className='text-xl font-semibold uppercase bg-primary text-white py-10 m-6 rounded-3xl'>
                 <ul className='flex flex-col justify-center items-center gap-10 cursor-pointer'>
-                    <li>Home</li>
-                    <li>About</li>
-                    <li>Service</li>
-                    <li>Contact</li>
+                    {NavbarMenu.map((item) => (
+                      <li key={item.id}>
+                        <Link to={item.link}>{item.title}</Link>
+                      </li>
+                    ))}
                 </ul>
                 </div>
             </motion.div>

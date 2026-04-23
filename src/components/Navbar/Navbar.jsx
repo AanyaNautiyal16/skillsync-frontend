@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { NavbarMenu } from '../../mockData/data';
 import {MdComputer, MdMenu} from "react-icons/md";
 import { motion, useTransform } from 'framer-motion';
@@ -17,7 +18,7 @@ const Navbar = () => {
             {/*logo section*/}
             <div className='text-2xl flex items-center gap-2 font-bold'>
                 <MdComputer className= "text-3xl text-secondary "/>
-                <p>E-Learning</p>
+                <p>SkillSync</p>
             </div>
 
 
@@ -28,12 +29,12 @@ const Navbar = () => {
                     NavbarMenu.map((item) => {
                      return(
                         <li key= {item.id}>
-                            <a href={item.link}
+                            <Link to={item.link}
                             className='inline-block text-grey-600 text-sm xl:text-base px-1 py-2 xl:px-3 
                             hover:text-secondary transition-all duration-300 font-bold
                             '>
                                 {item.title}
-                            </a>
+                            </Link>
                         </li>
                         );
                     })

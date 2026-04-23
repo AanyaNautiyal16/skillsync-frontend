@@ -6,8 +6,8 @@ export const NavbarMenu = [
     },
     {
         id: 2,
-        title : "For Students",
-        link: "#",
+        title : "Courses",
+        link: "/courses",
     },
     {
         id: 3,

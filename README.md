@@ -1,8 +1,8 @@
-📚 E-Learning App - Frontend
-🚀 Live Preview: https://e-learning-app-frontend-two.vercel.app/
+📚 SkillSync App - Frontend
+🚀 Live Preview: https://skillsync-app-frontend-two.vercel.app/
 
 📌 Overview
-This is a frontend-only E-Learning platform built using React.js and Tailwind CSS. It provides an interactive and responsive UI for students to explore courses, watch educational content, and enhance their learning experience.
+This is a frontend-only SkillSync platform built using React.js and Tailwind CSS. It provides an interactive and responsive UI for students to explore courses, watch educational content, and enhance their learning experience.
 
 🛠️ Technologies Used
 React.js ⚛️ – Component-based UI architecture
@@ -28,8 +28,8 @@ Clone the repository:
 sh
 Copy
 Edit
-git clone https://github.com/vivek-Kr97/e-learning-app-frontend.git
-cd e-learning-app-frontend
+git clone https://github.com/vivek-Kr97/skillsync-app-frontend.git
+cd skillsync-app-frontend
 Install dependencies:
 
 sh
@@ -50,4 +50,4 @@ Open the app in your browser at http://localhost:5173/
 🤝 Contributing
 Contributions are welcome! Feel free to fork the repo, raise issues, or submit pull requests.
 
-Homepage: https://e-learning-app-frontend-two.vercel.app/
+Homepage: https://skillsync-app-frontend-two.vercel.app/
